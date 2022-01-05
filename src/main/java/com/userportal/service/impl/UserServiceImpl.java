@@ -88,14 +88,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User register(String firstName, String lastName, String username, String email) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException {
-        validateNewUsernameAndEmail(EMPTY, username, email);
+    public User register(String firstName, String lastName, String userName, String email) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException {
+        validateNewUsernameAndEmail(EMPTY, userName, email);
         User user = new User();
         user.setUserId(generateUserId());
         String password = generatePassword();
         user.setFirstName(firstName);
         user.setLastName(lastName);
-        user.setUsername(username);
+        user.setUsername(userName);
         user.setEmail(email);
         user.setJoinDate(new Date());
         user.setPassword(encodePassword(password));
@@ -103,10 +103,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setNotLocked(true);
         user.setRole(ROLE_USER.name());
         user.setAuthorities(ROLE_USER.getAuthorities());
-        user.setProfileImageUrl(getTemporaryProfileImageUrl(username));
+        user.setProfileImageUrl(getTemporaryProfileImageUrl(userName));
         userRepository.save(user);
         LOGGER.info("New user password: " + password);
-        emailService.sendNewPasswordEmail(firstName, password, email);
+//        emailService.sendNewPasswordEmail(firstName, password, email);
         return user;
     }
 
